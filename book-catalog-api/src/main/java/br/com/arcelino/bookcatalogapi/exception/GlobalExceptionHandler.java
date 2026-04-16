@@ -13,6 +13,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.arcelino.bookcatalogapi.dto.ApiErrorResponse;
+import br.com.arcelino.bookcatalogapi.dto.ValidationErrorResponse;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -97,21 +100,6 @@ public class GlobalExceptionHandler {
                 message,
                 Instant.now().toString());
         return ResponseEntity.status(status).body(response);
-    }
-
-    public record ApiErrorResponse(
-            int status,
-            String error,
-            String message,
-            String timestamp) {
-    }
-
-    public record ValidationErrorResponse(
-            int status,
-            String error,
-            String message,
-            String timestamp,
-            Map<String, String> fieldErrors) {
     }
 
 }
