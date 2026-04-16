@@ -35,6 +35,7 @@ public class GeneroService {
 
     @Transactional(readOnly = true)
     public GeneroResponse getGeneroById(Long id) {
+        log.info("Buscando gênero com id: {}", id);
         return generoRepository.findById(id)
                 .map(generoMapper::toResponse)
                 .orElseThrow(() -> new GeneroNotFoundException(id));
@@ -42,12 +43,14 @@ public class GeneroService {
 
     @Transactional
     public GeneroResponse criarGenero(GeneroRequest request) {
+        log.info("Criando novo gênero com nome: {}", request.nome());
         var genero = generoMapper.toEntity(request);
         return generoMapper.toResponse(generoRepository.save(genero));
     }
 
     @Transactional
     public GeneroResponse atualizarGenero(Long id, GeneroRequest request) {
+        log.info("Atualizando gênero com id: {}", id);
         var genero = generoRepository.findById(id)
                 .orElseThrow(() -> new GeneroNotFoundException(id));
 
