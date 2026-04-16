@@ -10,6 +10,7 @@ import br.com.arcelino.bookcatalogapi.dto.LivroFilter;
 import br.com.arcelino.bookcatalogapi.dto.LivroRequest;
 import br.com.arcelino.bookcatalogapi.dto.LivroResponse;
 import br.com.arcelino.bookcatalogapi.entity.Genero;
+import br.com.arcelino.bookcatalogapi.exception.LivroNotFoundException;
 import br.com.arcelino.bookcatalogapi.mapper.LivroMapper;
 import br.com.arcelino.bookcatalogapi.repository.LivroRepository;
 import lombok.AccessLevel;
@@ -36,7 +37,7 @@ public class LivroService {
     public LivroDetails getLivroDetails(Long id) {
         return livroRepository.findById(id)
                 .map(livroMapper::toDetails)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + id));
+                .orElseThrow(() -> new LivroNotFoundException(id));
 
     }
 
@@ -51,7 +52,7 @@ public class LivroService {
     @Transactional
     public LivroResponse atualizarLivro(Long id, LivroRequest request) {
         var livro = livroRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + id));
+                .orElseThrow(() -> new LivroNotFoundException(id));
 
         livroMapper.updateEntity(request, livro);
         livro.setGenero(criarReferenciaGenero(request.generoId()));
@@ -62,7 +63,7 @@ public class LivroService {
     @Transactional
     public void deletarLivro(Long id) {
         if (!livroRepository.existsById(id)) {
-            throw new RuntimeException("Livro não encontrado com id: " + id);
+            throw new LivroNotFoundException(id);
         }
         livroRepository.deleteById(id);
     }
