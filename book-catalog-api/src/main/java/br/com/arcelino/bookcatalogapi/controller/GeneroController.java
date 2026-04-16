@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -60,6 +61,10 @@ public class GeneroController {
     })
     @GetMapping("{id}")
     public GeneroResponse getGeneroById(
+            @Parameter(
+                description = "ID do gênero a ser recuperado",
+                example = "1",
+                required = true)
             @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id) {
         return generoService.getGeneroById(id);
     }
@@ -87,6 +92,10 @@ public class GeneroController {
     })
     @PutMapping("{id}")
     public GeneroResponse atualizarGenero(
+            @Parameter(
+                description = "ID do gênero a ser atualizado",
+                example = "1",
+                required = true)
             @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id,
             @RequestBody @Valid GeneroRequest request) {
         return generoService.atualizarGenero(id, request);

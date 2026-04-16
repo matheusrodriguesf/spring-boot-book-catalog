@@ -47,19 +47,26 @@ public class LivroController {
 
     @Operation(
         summary = "Listar livros com filtros e paginação", 
-        description = "Retorna uma lista paginada de livros que correspondem aos filtros fornecidos. Os filtros disponíveis incluem título, autor e gênero. A resposta inclui informações básicas de cada livro, como título, autor e preço.")
+        description = "Retorna uma lista paginada de livros que correspondem aos filtros fornecidos. Os filtros disponíveis incluem título, autor e gênero. A resposta inclui informações básicas de cada livro. Suporta paginação e ordenação através dos parâmetros padrão do Spring Data.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de livros retornada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida, por exemplo, parâmetros de filtro ou paginação inválidos", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @GetMapping
-    public Page<LivroResponse> getLivros(@Valid LivroFilter filter, Pageable pageable) {
+    public Page<LivroResponse> getLivros(
+            @Parameter(description = "Filtros para busca de livros")
+            @Valid LivroFilter filter,
+            
+            @Parameter(
+                description = "Paginação e ordenação. Ex: ?page=0&size=20&sort=titulo,asc",
+                example = "page=0&size=20")
+            Pageable pageable) {
         return livroService.getLivrosPorFiltros(filter, pageable);
     }
 
     @Operation(
-        summary = "Obter detalhes de um livro", 
-        description = "Retorna os detalhes completos de um livro específico, incluindo título, autor, gênero, preço e data de publicação.")
+        summary = "Obter detalhes completos de um livro", 
+        description = "Retorna os detalhes completos de um livro específico, incluindo título, autor, ISBN, gênero, preço e data de publicação.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Detalhes do livro retornados com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida, por exemplo, id do livro não é um número positivo"),
