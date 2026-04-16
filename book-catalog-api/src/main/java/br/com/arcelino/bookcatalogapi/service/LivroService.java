@@ -32,12 +32,15 @@ public class LivroService {
 
     @Transactional(readOnly = true)
     public Page<LivroResponse> getLivrosPorFiltros(LivroFilter filter, Pageable pageable) {
+        log.info("Buscando livros com filtros - Título: {}, Autor: {}, Gênero: {}", filter.titulo(), filter.autor(),
+                filter.genero());
         return livroRepository.buscarLivrosPorFiltros(filter, pageable)
                 .map(livroMapper::toResponse);
     }
 
     @Transactional(readOnly = true)
     public LivroDetails getLivroDetails(Long id) {
+        log.info("Buscando detalhes do livro com id: {}", id);
         return livroRepository.findById(id)
                 .map(livroMapper::toDetails)
                 .orElseThrow(() -> new LivroNotFoundException(id));
@@ -46,6 +49,7 @@ public class LivroService {
 
     @Transactional
     public LivroResponse criarLivro(LivroRequest request) {
+        log.info("Criando novo livro com título: {}", request.titulo());
         var livro = livroMapper.toEntity(request);
         livro.setGenero(criarReferenciaGenero(request.generoId()));
 
@@ -54,6 +58,7 @@ public class LivroService {
 
     @Transactional
     public LivroResponse atualizarLivro(Long id, LivroRequest request) {
+        log.info("Atualizando livro com id: {}", id);
         var livro = livroRepository.findById(id)
                 .orElseThrow(() -> new LivroNotFoundException(id));
 
@@ -65,6 +70,7 @@ public class LivroService {
 
     @Transactional
     public void deletarLivro(Long id) {
+        log.info("Deletando livro com id: {}", id);
         if (!livroRepository.existsById(id)) {
             throw new LivroNotFoundException(id);
         }

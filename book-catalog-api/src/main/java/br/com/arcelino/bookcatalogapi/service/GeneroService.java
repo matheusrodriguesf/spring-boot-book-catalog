@@ -22,6 +22,7 @@ public class GeneroService {
     GeneroMapper generoMapper;
 
     public List<GeneroResponse> allGeneros() {
+        log.info("Buscando todos os gêneros");
         return generoRepository.findAll()
                 .stream()
                 .map(generoMapper::toResponse)
