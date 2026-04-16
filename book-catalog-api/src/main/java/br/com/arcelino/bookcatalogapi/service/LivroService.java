@@ -1,5 +1,6 @@
 package br.com.arcelino.bookcatalogapi.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import br.com.arcelino.bookcatalogapi.dto.LivroFilter;
 import br.com.arcelino.bookcatalogapi.dto.LivroRequest;
 import br.com.arcelino.bookcatalogapi.dto.LivroResponse;
 import br.com.arcelino.bookcatalogapi.entity.Genero;
+import br.com.arcelino.bookcatalogapi.entity.Livro;
+import br.com.arcelino.bookcatalogapi.exception.InvalidLivroRequestException;
 import br.com.arcelino.bookcatalogapi.exception.LivroNotFoundException;
 import br.com.arcelino.bookcatalogapi.mapper.LivroMapper;
 import br.com.arcelino.bookcatalogapi.repository.LivroRepository;
@@ -46,7 +49,7 @@ public class LivroService {
         var livro = livroMapper.toEntity(request);
         livro.setGenero(criarReferenciaGenero(request.generoId()));
 
-        return livroMapper.toResponse(livroRepository.save(livro));
+        return livroMapper.toResponse(salvarLivro(livro));
     }
 
     @Transactional
@@ -57,7 +60,7 @@ public class LivroService {
         livroMapper.updateEntity(request, livro);
         livro.setGenero(criarReferenciaGenero(request.generoId()));
 
-        return livroMapper.toResponse(livroRepository.save(livro));
+        return livroMapper.toResponse(salvarLivro(livro));
     }
 
     @Transactional
@@ -72,6 +75,14 @@ public class LivroService {
         return Genero.builder()
                 .id(generoId)
                 .build();
+    }
+
+    private Livro salvarLivro(Livro livro) {
+        try {
+            return livroRepository.save(livro);
+        } catch (DataIntegrityViolationException ex) {
+            throw new InvalidLivroRequestException();
+        }
     }
 
 }
