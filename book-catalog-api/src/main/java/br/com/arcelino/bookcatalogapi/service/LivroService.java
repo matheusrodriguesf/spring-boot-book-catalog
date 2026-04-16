@@ -3,6 +3,7 @@ package br.com.arcelino.bookcatalogapi.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.arcelino.bookcatalogapi.dto.LivroDetails;
 import br.com.arcelino.bookcatalogapi.dto.LivroFilter;
@@ -25,11 +26,13 @@ public class LivroService {
     LivroRepository livroRepository;
     LivroMapper livroMapper;
 
+    @Transactional(readOnly = true)
     public Page<LivroResponse> getLivrosPorFiltros(LivroFilter filter, Pageable pageable) {
         return livroRepository.buscarLivrosPorFiltros(filter, pageable)
                 .map(livroMapper::toResponse);
     }
 
+    @Transactional(readOnly = true)
     public LivroDetails getLivroDetails(Long id) {
         return livroRepository.findById(id)
                 .map(livroMapper::toDetails)
@@ -37,6 +40,7 @@ public class LivroService {
 
     }
 
+    @Transactional
     public LivroResponse criarLivro(LivroRequest request) {
         var livro = livroMapper.toEntity(request);
         livro.setGenero(criarReferenciaGenero(request.generoId()));
@@ -44,6 +48,7 @@ public class LivroService {
         return livroMapper.toResponse(livroRepository.save(livro));
     }
 
+    @Transactional
     public LivroResponse atualizarLivro(Long id, LivroRequest request) {
         var livro = livroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + id));
@@ -54,6 +59,7 @@ public class LivroService {
         return livroMapper.toResponse(livroRepository.save(livro));
     }
 
+    @Transactional
     public void deletarLivro(Long id) {
         if (!livroRepository.existsById(id)) {
             throw new RuntimeException("Livro não encontrado com id: " + id);
