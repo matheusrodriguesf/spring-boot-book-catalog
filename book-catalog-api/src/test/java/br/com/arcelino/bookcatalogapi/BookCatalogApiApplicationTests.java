@@ -1,4 +1,4 @@
-package br.com.arcelino.book_catalog_api;
+package br.com.arcelino.bookcatalogapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
