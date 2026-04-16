@@ -44,7 +44,7 @@ public class LivroController {
 
     @GetMapping("{id}/details")
     public LivroDetails getLivroDetails(
-            @PathVariable @Positive(message = "O id deve ser um número positivo maior que zero") Long id) {
+            @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id) {
         return livroService.getLivroDetails(id);
     }
 
@@ -56,14 +56,14 @@ public class LivroController {
 
     @PutMapping("{id}")
     public LivroResponse atualizarLivro(
-            @PathVariable @Positive(message = "O id deve ser um número positivo maior que zero") Long id,
+            @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id,
             @RequestBody @Valid LivroRequest request) {
         return livroService.atualizarLivro(id, request);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletarLivro(
-            @PathVariable @Positive(message = "O id deve ser um número positivo maior que zero") Long id) {
+            @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id) {
         livroService.deletarLivro(id);
         return ResponseEntity.noContent().build();
     }

@@ -39,7 +39,7 @@ public class GeneroController {
 
     @GetMapping("{id}")
     public GeneroResponse getGeneroById(
-            @PathVariable @Positive(message = "O id deve ser um número positivo maior que zero") Long id) {
+            @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id) {
         return generoService.getGeneroById(id);
     }
 
@@ -51,7 +51,7 @@ public class GeneroController {
 
     @PutMapping("{id}")
     public GeneroResponse atualizarGenero(
-            @PathVariable @Positive(message = "O id deve ser um número positivo maior que zero") Long id,
+            @PathVariable @Positive(message = "O id deve ser um número maior que zero") Long id,
             @RequestBody @Valid GeneroRequest request) {
         return generoService.atualizarGenero(id, request);
     }
