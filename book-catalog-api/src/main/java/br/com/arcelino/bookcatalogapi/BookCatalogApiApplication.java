@@ -1,4 +1,4 @@
-package br.com.arcelino.book_catalog_api;
+package br.com.arcelino.bookcatalogapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
