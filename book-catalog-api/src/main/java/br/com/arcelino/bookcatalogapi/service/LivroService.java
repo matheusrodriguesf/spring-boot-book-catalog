@@ -54,6 +54,13 @@ public class LivroService {
         return livroMapper.toResponse(livroRepository.save(livro));
     }
 
+    public void deletarLivro(Long id) {
+        if (!livroRepository.existsById(id)) {
+            throw new RuntimeException("Livro não encontrado com id: " + id);
+        }
+        livroRepository.deleteById(id);
+    }
+
     private Genero criarReferenciaGenero(Long generoId) {
         return Genero.builder()
                 .id(generoId)

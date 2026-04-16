@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,11 @@ public class LivroController {
     @PutMapping("{id}")
     public LivroResponse atualizarLivro(@PathVariable Long id, @RequestBody @Valid LivroRequest request) {
         return livroService.atualizarLivro(id, request);
+    }
+
+    @DeleteMapping("{id}")
+    public void deletarLivro(@PathVariable Long id) {
+        livroService.deletarLivro(id);
     }
 
 }
