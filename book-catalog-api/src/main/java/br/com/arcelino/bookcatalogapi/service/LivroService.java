@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.arcelino.bookcatalogapi.dto.LivroDetails;
 import br.com.arcelino.bookcatalogapi.dto.LivroFilter;
+import br.com.arcelino.bookcatalogapi.dto.LivroRequest;
 import br.com.arcelino.bookcatalogapi.dto.LivroResponse;
+import br.com.arcelino.bookcatalogapi.entity.Genero;
 import br.com.arcelino.bookcatalogapi.mapper.LivroMapper;
 import br.com.arcelino.bookcatalogapi.repository.LivroRepository;
 import lombok.AccessLevel;
@@ -33,6 +35,29 @@ public class LivroService {
                 .map(livroMapper::toDetails)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + id));
 
+    }
+
+    public LivroResponse criarLivro(LivroRequest request) {
+        var livro = livroMapper.toEntity(request);
+        livro.setGenero(criarReferenciaGenero(request.generoId()));
+
+        return livroMapper.toResponse(livroRepository.save(livro));
+    }
+
+    public LivroResponse atualizarLivro(Long id, LivroRequest request) {
+        var livro = livroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + id));
+
+        livroMapper.updateEntity(request, livro);
+        livro.setGenero(criarReferenciaGenero(request.generoId()));
+
+        return livroMapper.toResponse(livroRepository.save(livro));
+    }
+
+    private Genero criarReferenciaGenero(Long generoId) {
+        return Genero.builder()
+                .id(generoId)
+                .build();
     }
 
 }
