@@ -30,6 +30,7 @@ import lombok.experimental.FieldDefaults;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springdoc.core.annotations.ParameterObject;
 
 @Tag(name = "Livros", description = "Endpoints para gerenciamento de livros")
 @RestController
@@ -90,13 +92,8 @@ public class LivroController {
     })
     @GetMapping
     public Page<LivroResponse> getLivros(
-            @Parameter(description = "Filtros para busca de livros")
-            @Valid LivroFilter filter,
-            
-            @Parameter(
-                description = "Paginação e ordenação. Ex: ?page=0&size=20&sort=titulo,asc",
-                example = "page=0&size=20")
-            Pageable pageable) {
+            @Valid @ModelAttribute @ParameterObject LivroFilter filter,
+            @ParameterObject Pageable pageable) {
         return livroService.getLivrosPorFiltros(filter, pageable);
     }
 
